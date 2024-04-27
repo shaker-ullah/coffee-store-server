@@ -33,6 +33,7 @@ async function run() {
 
 
     const coffeeCollection = client.db('coffeeDB').collection('coffee')
+    const userCollection = client.db('userDB').collection('user')
 
 
     // read 
@@ -73,7 +74,7 @@ async function run() {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) }
       const option = { upsert: true }
-      const updatedCoffee= req.body
+      const updatedCoffee = req.body
       const coffee = {
         $set: {
           name: updatedCoffee.name,
@@ -89,8 +90,29 @@ async function run() {
       res.send(result)
     })
 
+    // User Related apis
+
+    app.post('/user', async (req, res) => {
+      const user = req.body;
+      console.log(user)
+      const result = await userCollection.insertOne(user)
+      res.send(result)
+    })
 
 
+    app.get('/user', async (req, res) => {
+      const user = req.body;
+      console.log(user)
+      const result = await userCollection.find().toArray()
+      res.send(result)
+    })
+
+
+    app.delete('/user/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
