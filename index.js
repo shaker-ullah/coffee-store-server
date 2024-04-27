@@ -115,6 +115,20 @@ async function run() {
       res.send(result)
     })
 
+    app.patch('/user', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email }
+      const updatedDoc = {
+        $set: {
+          lastLoginAt:user.lastLoginAt
+        
+        }
+      }
+      const result = await userCollection.updateOne(filter, updatedDoc)
+      res.send(result)
+})
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
